@@ -57,9 +57,19 @@ clean-nix:
 draw:
     #!/usr/bin/env bash
     set -euo pipefail
-    keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >"{{ draw }}/base.yaml"
-    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/base.yaml"
-    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/base.yaml" -k "ferris/sweep" >"{{ draw }}/base.svg"
+    keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/corne.keymap" --virtual-layers Combos >"{{ draw }}/corne.yaml"
+    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/corne.yaml"
+    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/corne.yaml" -k "splitkb/aurora/corne/rev1" >"{{ draw }}/corne.svg"
+    # Convert SVG to PNG (try multiple tools in order of preference)
+    if command -v rsvg-convert >/dev/null 2>&1; then
+        rsvg-convert -h 5000 "{{ draw }}/corne.svg" > "{{ draw }}/corne.png"
+    elif command -v inkscape >/dev/null 2>&1; then
+        inkscape --export-type=png --export-dpi=300 "{{ draw }}/corne.svg" --export-filename="{{ draw }}/corne.png"
+    elif command -v convert >/dev/null 2>&1; then
+        convert "{{ draw }}/corne.svg" "{{ draw }}/corne.png"
+    else
+        echo "Warning: No SVG-to-PNG converter found. Install rsvg-convert, inkscape, or imagemagick to generate PNG output."
+    fi
 
 # initialize west
 init:
