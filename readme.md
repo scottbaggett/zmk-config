@@ -1,8 +1,7 @@
-# urob's zmk-config
+# scottbaggett's zmk config
 
 This is my personal [ZMK firmware](https://github.com/zmkfirmware/zmk/)
-configuration. It consists of a 34-keys base layout that is re-used for various
-boards, including my Corneish Zen and my Planck.
+configuration. It consists of a 42-keys base layout that is used on a corne board.
 
 My configuration currently builds against `v0.3` of upstream ZMK.
 Custom functionality is added through various
