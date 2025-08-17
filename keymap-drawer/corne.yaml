@@ -42,13 +42,13 @@ layers:
     - {t: Enter, h: FUNCTIONS}
     - {t: Num Word, h: NUMBERS, s: '$$mdi:pin$$'}
     - Magic Shift
-    - Smart Mouse
+    - MOUSE
   NAV:
     - {type: trans}
     - Alt+F4
     - {type: trans}
     - $$mdi:view-carousel-outline$$
-    - $$mdi:view-carousel$$
+    - Gui+Tab
     - {type: trans}
     - $$mdi:transfer-up$$
     - {t: '$$mdi:backspace$$', h: 'Ctl+$$mdi:backspace$$'}
@@ -262,8 +262,8 @@ layers:
     - {type: trans}
     - {type: trans}
     - {type: trans}
-    - {type: trans}
-    - {type: trans}
+    - {type: held alternate}
+    - {type: held alternate}
     - {type: trans}
     - {type: trans}
     - {type: trans}
@@ -300,7 +300,7 @@ layers:
     - {type: trans}
     - Scroll ↑
     - Scroll ↓
-    - {type: trans}
+    - {type: held}
   Combos: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
     '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
     '', '', '', '']
@@ -309,11 +309,24 @@ combos:
     k: Esc
     l: [Combos]
   - p: [3, 4]
-    k: Smart Mouse
+    k: MOUSE
     l: [Combos]
   - p: [14, 15]
     k: Tab
     l: [Combos]
+  - p: [15, 16]
+    k: '&leader'
+    l: [Combos]
+  - p: [14, 15, 16]
+    k: '&leader_sft'
+    l: [Combos]
+    a: top
+    o: 1.35
+  - p: [26, 28]
+    k: Cut
+    l: [Combos]
+    a: bottom
+    o: 0.15
   - p: [26, 27]
     k: Copy
     l: [Combos]
@@ -326,6 +339,16 @@ combos:
   - p: [8, 9]
     k: Del
     l: [Combos]
+  - p: [19, 20]
+    k: {t: (, s: <}
+    l: [Combos]
+  - p: [20, 21]
+    k: {t: ), s: '>'}
+    l: [Combos]
+  - p: [19, 20]
+    k: <
+    l: [Combos]
+    hidden: true
   - p: [20, 21]
     k: '>'
     l: [Combos]
