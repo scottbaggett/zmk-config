@@ -1,0 +1,229 @@
+layout: {zmk_keyboard: corne}
+layers:
+  main:
+    - ESCAPE
+    - Q
+    - W
+    - E
+    - R
+    - T
+    - Y
+    - U
+    - I
+    - O
+    - P
+    - {t: '$$mdi:backspace$$', type: backspace}
+    - $$mdi:apple-keyboard-control$$
+    - A
+    - S
+    - D
+    - {t: F, h: '$$mdi:apple-keyboard-shift$$'}
+    - G
+    - H
+    - {t: J, h: RIGHT SHIFT}
+    - K
+    - L
+    - ;
+    - ''''
+    - LEFT SHIFT
+    - Z
+    - X
+    - C
+    - V
+    - B
+    - N
+    - M
+    - ','
+    - .
+    - /
+    - $$mdi:apple-keyboard-shift$$
+    - NUMCMD
+    - {t: Tab, h: SYM}
+    - {t: ENTER, h: LEFT GUI}
+    - $$mdi:keyboard-space$$
+    - nav
+    - RIGHT ALT
+  SYM:
+    - ESCAPE
+    - '!'
+    - '@'
+    - '#'
+    - $
+    - '%'
+    - ^
+    - '&'
+    - '*'
+    - (
+    - )
+    - {type: trans}
+    - '~'
+    - {type: trans}
+    - {type: trans}
+    - ':'
+    - <
+    - '>'
+    - '='
+    - '-'
+    - ''''
+    - '{'
+    - '}'
+    - '|'
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - _
+    - +
+    - ','
+    - {t: '[', h: 'Gui+Sft+['}
+    - {t: ']', h: 'Gui+Sft+]'}
+    - {type: trans}
+    - {type: trans}
+    - {type: held}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+  nav:
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - Mouse ↑
+    - {type: trans}
+    - {type: trans}
+    - Meh+1
+    - Meh+2
+    - UP ARROW
+    - Meh+3
+    - Meh+4
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - Mouse ←
+    - Mouse ↓
+    - Mouse →
+    - '&mkp MB1'
+    - Home
+    - LEFT ARROW
+    - DOWN ARROW
+    - $$mdi:arrow-right-bold$$
+    - End
+    - {type: trans}
+    - {type: trans}
+    - $$mdi:skip-previous$$
+    - $$mdi:skip-next$$
+    - PLAY PAUSE
+    - VOLUME DOWN
+    - $$mdi:volume-high$$
+    - Del
+    - {t: '$$mdi:backspace$$', type: backspace}
+    - PAGE DOWN
+    - $$mdi:transfer-up$$
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: held}
+    - {type: trans}
+  NUMCMD:
+    - ESCAPE
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    - '8'
+    - '9'
+    - '0'
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - '4'
+    - '5'
+    - '6'
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - '0'
+    - '1'
+    - '2'
+    - '3'
+    - {type: trans}
+    - {type: trans}
+    - {type: held}
+    - {type: trans}
+    - {type: trans}
+    - AltGr+Ctl+RIGHT GUI
+    - {type: trans}
+    - Ctl+AltGr+RIGHT SHIFT
+  adj:
+    - {type: trans}
+    - F1
+    - F2
+    - F3
+    - F4
+    - F5
+    - F6
+    - F7
+    - F8
+    - F9
+    - F10
+    - {type: trans}
+    - {type: trans}
+    - F11
+    - F12
+    - {type: trans}
+    - {type: trans}
+    - '&studio_unlock'
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - BT 1
+    - BT 2
+    - BT 3
+    - BT CLR
+    - BT CLR ALL
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - Boot
+    - {type: trans}
+    - {type: held}
+    - {type: held}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+    - {type: trans}
+  Combos: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+    '', '', '', '']
+combos:
+  - p: [39, 14, 15]
+    k: ':'
+    l:
+      - Combos
+  - p: [16, 17]
+    k: '&browsertab'
+    l:
+      - Combos
