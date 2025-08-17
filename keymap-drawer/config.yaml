@@ -1,0 +1,484 @@
+parse_config:
+  mark_alternate_layer_activators: true
+  zmk_additional_includes:
+    - "modules/zmk/helpers/include"
+
+  zmk_preamble: |
+    #include <zmk-helpers/key-labels/34.h>
+    #define CONFIG_WIRELESS
+
+  raw_binding_map:
+    "&sys_reset": Reset
+    "&bootloader": Boot
+    "&caps_word": Caps Word
+
+    "&bt BT_SEL 0": BT 1
+    "&bt BT_SEL 1": BT 2
+    "&bt BT_SEL 2": BT 3
+    "&bt BT_SEL 3": BT 4
+
+    "&kp LC(INS)": Copy
+    "&kp LC(X)": Cut
+    "&kp LS(INS)": Paste
+
+    "&kp LG(LC(LEFT))": Prev Desk
+    "&kp LG(LC(RIGHT))": Next Desk
+    "&hmr LCTRL LC(LEFT)": "← Desk"
+    "&hmr LALT LC(RIGHT)": "Desk →"
+    "&kp LG(LC(LS(A)))": Pin App
+    "&kp LG(LC(LS(Q)))": Pin Win
+    "&swapper": "$$mdi:view-carousel$$"
+    "&kp LS(LG(TAB))": "$$mdi:view-carousel-outline$$"
+    "&dot_spc": Sentence
+    "&num_dance": { "t": "Num Word", "s": "$$mdi:pin$$", h: "" }
+    "&magic_shift": { "t": "Magic Shift" }
+    "&smart_mouse": Smart Mouse
+    "&hml LS(LALT)TAB": Tab
+    "&hm_combo_ldr": Leader
+    "&hm_combo_ldrsh": Shift+Leader
+    "&hm_combo_lpar": { "t": "(", "right": "<" }
+    "&hm_combo_rpar": { "t": ")", "right": ">" }
+    "&kp LBKT": { "t": "[", "right": "{" }
+    "&kp RBKT": { "t": "]", "right": "}" }
+
+    "&mmv MOVE_UP": Mouse ↑
+    "&mmv MOVE_DOWN": Mouse ↓
+    "&mmv MOVE_LEFT": Mouse ←
+    "&mmv MOVE_RIGHT": Mouse →
+
+    "&msc SCRL_UP": Scroll ↑
+    "&msc SCRL_DOWN": Scroll ↓
+    "&msc SCRL_LEFT": Scroll ←
+    "&msc SCRL_RIGHT": Scroll →
+
+    "&mkp LCLK": Left Click
+    "&mkp RCLK": Right Click
+    "&mkp MCLK": Middle Click
+    "&mkp MB4": Back Click
+    "&mkp MB5": Forward Click
+
+    "&sk LGUI": { "t": "$$mdi:apple-keyboard-command$$", "s": "$$mdi:pin$$" }
+    "&sk LALT": { "t": "$$mdi:apple-keyboard-option$$", "s": "$$mdi:pin$$" }
+    "&sk LSHFT": { "t": "$$mdi:apple-keyboard-shift$$", "s": "$$mdi:pin$$" }
+    "&sk LCTRL": { "t": "$$mdi:apple-keyboard-control$$", "s": "$$mdi:pin$$" }
+
+  trans_legend: { "t": "", "type": "trans" }
+
+  zmk_combos:
+    combo_cut: { align: bottom, o: 0.15 }
+    combo_ldrsh: { align: top, o: 1.35 }
+
+    combo_lt: { hidden: true }
+    combo_gt: { hidden: true }
+    combo_lbrc: { hidden: true }
+    combo_rbrc: { hidden: true }
+
+  zmk_keycode_map:
+    LCTRL: $$mdi:apple-keyboard-control$$
+    LALT: $$mdi:apple-keyboard-option$$
+    LSHIFT: $$mdi:apple-keyboard-shift$$
+    LSHFT: $$mdi:apple-keyboard-shift$$
+    LCMD: $$mdi:apple-keyboard-command$$
+    RCTRL: $$mdi:apple-keyboard-control$$
+    RALT: $$mdi:apple-keyboard-option$$
+    RSHIFT: $$mdi:apple-keyboard-shift$$
+    RSHFT: $$mdi:apple-keyboard-shift$$
+    RCMD: $$mdi:apple-keyboard-command$$
+    LS(LC(LALT)): $$mdi:triangle$$ # Meh
+    LGUI: $$mdi:apple-keyboard-command$$
+    RGUI: $$mdi:apple-keyboard-command$$
+
+    BSPC:
+      type: backspace
+      tap: $$mdi:backspace$$
+    DEL: Del
+    ESC: Esc
+    RET: Enter
+    SPACE: $$mdi:keyboard-space$$
+    TAB: Tab
+    BACKSPACE:
+      type: backspace
+      tap: $$mdi:backspace$$
+    INS: Ins
+    HOME: Home
+    END: End
+
+    # Arrows
+    UP: $$mdi:arrow-up-bold$$
+    DOWN: $$mdi:arrow-down-bold$$
+    LEFT: $$mdi:arrow-left-bold$$
+    RIGHT: $$mdi:arrow-right-bold$$
+    PG_UP: $$mdi:transfer-up$$
+    PG_DN: $$mdi:transfer-down$$
+
+    C_MUTE: $$mdi:volume-off$$
+    C_VOL_UP: $$mdi:volume-high$$
+    C_VOL_DN: $$mdi:volume-medium$$
+    # Media
+    C_NEXT: $$mdi:skip-next$$
+    C_PREV: $$mdi:skip-previous$$
+    C_PP: $$mdi:play-pause$$
+
+    # defaults
+    AMPERSAND: "&"
+    AMPS: "&"
+    APOS: "'"
+    APOSTROPHE: "'"
+    ASTERISK: "*"
+    ASTRK: "*"
+    AT: "@"
+    AT_SIGN: "@"
+    BACKSLASH: \
+    BSLH: \
+    CARET: ^
+    COLON: ":"
+    COMMA: ","
+    DLLR: $
+    DOLLAR: $
+    DOT: .
+    DOUBLE_QUOTES: '"'
+    DQT: '"'
+    EQUAL: "="
+    EXCL: "!"
+    EXCLAMATION: "!"
+    FSLH: /
+    GRAVE: "`"
+    GREATER_THAN: ">"
+    GT: ">"
+    HASH: "#"
+    LBKT: "["
+    LBRC: "{"
+    LEFT_BRACE: "{"
+    LEFT_BRACKET: "["
+    LEFT_PARENTHESIS: (
+    LESS_THAN: <
+    LPAR: (
+    LT: <
+    MINUS: "-"
+    NON_US_BACKSLASH: \
+    NON_US_BSLH: "|"
+    NON_US_HASH: "#"
+    NUHS: "#"
+    PERCENT: "%"
+    PERIOD: .
+    PIPE: "|"
+    PIPE2: "|"
+    PLUS: +
+    POUND: "#"
+    PRCNT: "%"
+    QMARK: "?"
+    QUESTION: "?"
+    RBKT: "]"
+    RBRC: "}"
+    RIGHT_BRACE: "}"
+    RIGHT_BRACKET: "]"
+    RIGHT_PARENTHESIS: )
+    RPAR: )
+    SEMI: ;
+    SEMICOLON: ;
+    SINGLE_QUOTE: "'"
+    SLASH: /
+    SQT: "'"
+    STAR: "*"
+    TILDE: "~"
+    TILDE2: "~"
+    UNDER: _
+    UNDERSCORE: _
+
+draw_config:
+  # key dimensions, non-ortho layouts use key_h for width as well
+  # key_w: 100 # This doesn't seem to do anything? 🤔
+  key_h: 85
+
+  # keys border radius
+  key_rx: 12
+  key_ry: 12
+
+  # key labels line spacing for multi-line labels
+  line_spacing: 1
+
+  # combo box dimensions
+  combo_w: 50
+  combo_h: 50
+
+  # padding from the edge of cap to top and bottom legends
+  small_pad: 3
+
+  # Padding between keys
+  inner_pad_w: 1.5
+  inner_pad_h: 1.5
+
+  # padding between layers
+  outer_pad_w: 10
+  outer_pad_h: 100
+
+  # gap between two halves for ortho layout generator
+  # split_gap: 20 # This doesn't seem to have any effect either? 🤔
+
+  # as it reads on the tin can, this comment is here for consistency
+  append_colon_to_layer_header: false
+
+  # shrink font size for legends wider than this many chars, set to 0 to disable
+  # ideal value depends on the font size defined in svg_style and width of the boxes
+  shrink_wide_legends: 8
+
+  # Glyphs dimensions
+  glyph_tap_size: 20
+  glyph_hold_size: 20
+  glyph_shifted_size: 20
+
+  svg_style: |
+    /* inherit to force styles through use tags */
+    svg path {
+        fill: inherit;
+    }
+
+    svg text {
+      text-anchor: middle
+    }
+
+    /* font and background color specifications */
+    svg.keymap {
+        /*
+        * ====================
+        * Theme Variables
+        * ====================
+        */
+
+        --logo-path: none;
+        --logo-size: 12%;
+        --logo-position: 49.5% 5%;
+
+        /* === Colors === */
+
+        --color-blue--50: rgb(227, 242, 253);
+        --color-blue--100: rgb(187, 222, 251);
+        --color-blue--200: rgb(144, 202, 249);
+        --color-blue--300: rgb(100, 181, 246);
+        --color-blue--400: rgb(66, 165, 245);
+        --color-blue--500: rgb(33, 150, 243);
+        --color-blue--600: rgb(30, 136, 229);
+        --color-blue--700: rgb(25, 118, 210);
+        --color-blue--800: rgb(21, 101, 192);
+        --color-blue--900: rgb(13, 71, 161);
+        --color-blue--a100: rgb(130, 177, 255);
+        --color-blue--a200: rgb(68, 138, 255);
+        --color-blue--a400: rgb(41, 121, 255);
+        --color-blue--a700: rgb(41, 98, 255);
+
+       --color-blue-gray--50: rgb(236, 239, 241);
+       --color-blue-gray--100: rgb(207, 216, 220);
+       --color-blue-gray--200: rgb(176, 190, 197);
+       --color-blue-gray--300: rgb(144, 164, 174);
+       --color-blue-gray--400: rgb(120, 144, 156);
+       --color-blue-gray--500: rgb(96, 125, 139);
+       --color-blue-gray--600: rgb(84, 110, 122);
+       --color-blue-gray--700: rgb(69, 90, 100);
+       --color-blue-gray--800: rgb(55, 71, 79);
+       --color-blue-gray--900: rgb(38, 50, 56);
+
+        --color-blue-light--50: rgb(225, 245, 254);
+        --color-blue-light--100: rgb(179, 229, 252);
+        --color-blue-light--200: rgb(129, 212, 250);
+        --color-blue-light--300: rgb(79, 195, 247);
+        --color-blue-light--400: rgb(41, 182, 246);
+        --color-blue-light--500: rgb(3, 169, 244);
+        --color-blue-light--600: rgb(3, 155, 229);
+        --color-blue-light--700: rgb(2, 136, 209);
+        --color-blue-light--800: rgb(2, 119, 189);
+        --color-blue-light--900: rgb(1, 87, 155);
+        --color-blue-light--a100: rgb(128, 216, 255);
+        --color-blue-light--a200: rgb(64, 196, 255);
+        --color-blue-light--a400: rgb(0, 176, 255);
+        --color-blue-light--a700: rgb(0, 145, 234);
+
+        --color-purple--50: rgb(243, 229, 245);
+        --color-purple--100: rgb(225, 190, 231);
+        --color-purple--200: rgb(206, 147, 216);
+        --color-purple--300: rgb(186, 104, 200);
+        --color-purple--400: rgb(171, 71, 188);
+        --color-purple--500: rgb(156, 39, 176);
+        --color-purple--600: rgb(142, 36, 170);
+        --color-purple--700: rgb(123, 31, 162);
+        --color-purple--800: rgb(106, 27, 154);
+        --color-purple--900: rgb(74, 20, 140);
+        --color-purple--a100: rgb(234, 128, 252);
+        --color-purple--a200: rgb(224, 64, 251);
+        --color-purple--a400: rgb(213, 0, 249);
+        --color-purple--a700: rgb(170, 0, 255);
+
+        --color-red--50: rgb(255, 235, 238);
+        --color-red--100: rgb(255, 205, 210);
+        --color-red--200: rgb(239, 154, 154);
+        --color-red--300: rgb(229, 115, 115);
+        --color-red--400: rgb(239, 83, 80);
+        --color-red--500: rgb(244, 67, 54);
+        --color-red--600: rgb(229, 57, 53);
+        --color-red--700: rgb(211, 47, 47);
+        --color-red--800: rgb(198, 40, 40);
+        --color-red--900: rgb(183, 28, 28);
+        --color-red--a100: rgb(255, 138, 128);
+        --color-red--a200: rgb(255, 82, 82);
+        --color-red--a400: rgb(255, 23, 68);
+        --color-red--a700: rgb(213, 0, 0);
+
+        --color-teal--50: rgb(224, 242, 241);
+        --color-teal--100: rgb(178, 223, 219);
+        --color-teal--200: rgb(128, 203, 196);
+        --color-teal--300: rgb(77, 182, 172);
+        --color-teal--400: rgb(38, 166, 154);
+        --color-teal--500: rgb(0, 150, 136);
+        --color-teal--600: rgb(0, 137, 123);
+        --color-teal--700: rgb(0, 121, 107);
+        --color-teal--800: rgb(0, 105, 92);
+        --color-teal--900: rgb(0, 77, 64);
+        --color-teal--a100: rgb(167, 255, 235);
+        --color-teal--a200: rgb(100, 255, 218);
+        --color-teal--a400: rgb(29, 233, 182);
+        --color-teal--a700: rgb(0, 191, 165);
+
+        --color-yellow--50: rgb(255, 253, 231);
+        --color-yellow--100: rgb(255, 249, 196);
+        --color-yellow--200: rgb(255, 245, 157);
+        --color-yellow--300: rgb(255, 241, 118);
+        --color-yellow--400: rgb(255, 238, 88);
+        --color-yellow--500: rgb(255, 235, 59);
+        --color-yellow--600: rgb(253, 216, 53);
+        --color-yellow--700: rgb(251, 192, 45);
+        --color-yellow--800: rgb(249, 168, 37);
+        --color-yellow--900: rgb(245, 127, 23);
+        --color-yellow--a100: rgb(255, 255, 141);
+        --color-yellow--a200: rgb(255, 255, 0);
+        --color-yellow--a400: rgb(255, 234, 0);
+        --color-yellow--a700: rgb(255, 214, 0);
+
+        --color--turquoise--500: rgb(51, 204, 204);
+
+        --color--bg: transparent;
+        --color--text: var(--color-blue-gray--900);
+
+        --color--layer--text: var(--color-blue-gray--400);
+
+        --color--key--bg: var(--color-blue-gray--100);
+        --color--key--border: white;
+        --color--key--text--tap: var(--color--text);
+        --color--key--text--shifted: var(--color-blue-gray--400);
+        --color--key--text--hold: var(--color-blue-gray--400);
+
+        --color--combo--bg: var(--color-blue-gray--400);
+        --color--combo--border: var(--color--combo--bg);
+        --color--combo--dendron: var(--color--combo--border);
+        --color--combo--text--tap: var(--color-blue-gray--100);
+        --color--combo--text--shifted: var(--color-blue-gray--400);
+        --color--combo--text--hold: var(--color--combo--text--tap);
+
+        /*
+        * ====================
+        * /End Theme Variables
+        * ====================
+        */
+
+        font-family: system-ui, sans-serif;
+        font-weight: 600;
+        font-kerning: normal;
+        text-rendering: optimizeLegibility;
+        fill: var(--color--text);
+        background-color: var(--color--bg);
+        background-image: var(--logo-path);
+        background-repeat: no-repeat;
+        background-position: var(--logo-position);
+        background-size: var(--logo-size) auto;
+    }
+
+    rect,
+    path {
+      shape-rendering: geometricPrecision;
+    }
+
+    text {
+        text-anchor: middle;
+        dominant-baseline: middle;
+        line-height: 1;
+    }
+
+    /* Layer labels */
+    text.label {
+        font-size: 36px;
+        text-anchor: start;
+        paint-order: stroke;
+        fill: var(--color--layer--text);
+        # translate: 581px 146px;
+    }
+    .layer-Fn text.label {
+        translate: 581px 164px;
+    }
+
+
+    /* Keys */
+    rect.key,
+    rect.combo {
+        fill: var(--color--key--bg);
+        stroke: var(--color--key--border);
+    }
+    .tap {
+      fill: var(--color--key--text--tap);
+    }
+
+    .shifted {
+        dominant-baseline: hanging;
+        fill: var(--color--key--text--shifted);
+    }
+    .shifted.glyph {
+        translate: 22px 0px;
+    }
+
+    .hold {
+        dominant-baseline: ideographic;
+        fill: var(--color--key--text--hold);
+    }
+    .hold.glyph {
+        translate: 22px 0px;
+    }
+
+    /*
+    * Combos
+    */
+    .combo {
+      --color--key--bg: var(--color--combo--bg);
+      --color--key--border: var(--color--combo--border);
+      --color--key--text--tap: var(--color--combo--text--tap);
+      --color--key--text--shifted: var(--color--combo--text--shifted);
+      --color--key--text--hold: var(--color--combo--text--hold);
+    }
+    rect.combo {
+      opacity: 0.8;
+      stroke-width: 0;
+    }
+    path.combo {
+      stroke-width: 1;
+      stroke: var(--color--combo--dendron);
+      fill: none;
+    }
+    .combo.tap {
+      font-size: 16px;
+    }
+    .combo.shifted {
+      font-size: 13px;
+      translate: -9px -2px;
+    }
+    .combo.shifted.glyph {
+      translate: -9px -3px;
+    }
+    .combo.hold {
+      font-size: 16px;
+      translate: 0 0;
+    }
+
+    /*
+    * Transparent, None, and Ghost Keys
+    */
+    .trans,
+    .none,
+    .ghost {
+      opacity: 0.4;
+    }

@@ -4,7 +4,7 @@ default:
 config := absolute_path('config')
 build := absolute_path('.build')
 out := absolute_path('firmware')
-draw := absolute_path('draw')
+draw := absolute_path('keymap-drawer')
 
 # parse build.yaml and filter targets by expression
 _parse_targets $expr:
@@ -59,14 +59,14 @@ draw:
     set -euo pipefail
     keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/corne.keymap" --virtual-layers Combos >"{{ draw }}/corne.yaml"
     yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/corne.yaml"
-    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/corne.yaml" -k "splitkb/aurora/corne/rev1" >"{{ draw }}/corne.svg"
+    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/corne.yaml" -k "splitkb/aurora/corne/rev1" >"{{ draw }}/images/corne.svg"
     # Convert SVG to PNG (try multiple tools in order of preference)
     if command -v rsvg-convert >/dev/null 2>&1; then
-        rsvg-convert -h 5000 "{{ draw }}/corne.svg" > "{{ draw }}/corne.png"
+        rsvg-convert -h 5000 "{{ draw }}/images/corne.svg" > "{{ draw }}/images/corne.png"
     elif command -v inkscape >/dev/null 2>&1; then
-        inkscape --export-type=png --export-dpi=300 "{{ draw }}/corne.svg" --export-filename="{{ draw }}/corne.png"
+        inkscape --export-type=png --export-dpi=300 "{{ draw }}/images/corne.svg" --export-filename="{{ draw }}/images/corne.png"
     elif command -v convert >/dev/null 2>&1; then
-        convert "{{ draw }}/corne.svg" "{{ draw }}/corne.png"
+        convert "{{ draw }}/images/corne.svg" "{{ draw }}/images/corne.png"
     else
         echo "Warning: No SVG-to-PNG converter found. Install rsvg-convert, inkscape, or imagemagick to generate PNG output."
     fi
