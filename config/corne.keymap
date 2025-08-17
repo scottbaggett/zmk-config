@@ -12,20 +12,24 @@
 #define _BT_SEL_KEYS_                                                        \
     &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR
 
-// QWERTY LAYOUT
-#define L_MAIN 0
+// LETTERS
+#define QWERTY 0
 // NAVIGATION
-#define L_NAV 1
+#define NAV 1
 // FUNCTIONS
-#define L_FN 2
+#define FN 2
 // NUMBERS
-#define L_NUM 3
+#define NUM 3
 // SYMBOLS
-#define L_SYM 4
+#define SYM 4
 // SYSTEM
-#define L_SYS 5
+#define SYS 5
 // MOUSE
-#define L_MOU 6
+#define MS 6
+// TOGGLE LAYERS
+#define LAYERS 7
+
+# define MEDIA 8
 
 // GLOBALS
 #define QUICK_TAP_MS 175
@@ -59,16 +63,6 @@
 
 &mt { MT_CORE };
 
-ZMK_HOLD_TAP(mt_home, bindings = <&masked_home>, <&kp>; MT_CORE)
-ZMK_HOLD_TAP(mt_end, bindings = <&masked_end>, <&kp>; MT_CORE)
-
-// Mask CTRL on left/right hold to avoid accidental jumps to start/end of doc.
-#define MASK_MODS(NAME, MODS, BINDING)                                         \
-  ZMK_MOD_MORPH(NAME, bindings = <BINDING>, <BINDING>; mods = <MODS>;)
-
-MASK_MODS(masked_home, (MOD_LCTL), &kp HOME)
-MASK_MODS(masked_end,  (MOD_LCTL), &kp END)
-
 /* Magic-shift & auto-layers */
 
 // Tap: repeat after alpha, else sticky-shift |
@@ -87,16 +81,16 @@ ZMK_ADAPTIVE_KEY(
       max-prior-idle-ms = <1200>;
       strict-modifiers;
     };)
-&caps_word { // Mods deactivate caps-word, requires PR #1451. [TODO: rebase]
+
+    &caps_word { // Mods deactivate caps-word, requires PR #1451. [TODO: rebase]
   /delete-property/ ignore-modifiers;
 };
 
-
 // Tap: num-word | double-tap: sticky num-layer | Hold: num-layer.
-#define SMART_NUM &smart_num L_NUM 0
+#define SMART_NUM &smart_num NUM 0
 ZMK_HOLD_TAP(smart_num, bindings = <&mo>, <&num_dance>; flavor = "balanced";
              tapping-term-ms = <200>; quick-tap-ms = <QUICK_TAP_MS>;)
-ZMK_TAP_DANCE(num_dance, bindings = <&mo L_NUM>, <&sl L_NUM>;
+ZMK_TAP_DANCE(num_dance, bindings = <&mo NUM>, <&sl NUM>;
               tapping-term-ms = <200>;)
 
 
@@ -104,21 +98,6 @@ ZMK_TAP_DANCE(num_dance, bindings = <&mo L_NUM>, <&sl L_NUM>;
 #define SIMPLE_MORPH(NAME, MOD, BINDING1, BINDING2)                            \
   ZMK_MOD_MORPH(NAME, mods = <(MOD_L##MOD | MOD_R##MOD)>;                      \
                 bindings = <BINDING1>, <BINDING2>;)
-
-// Tap: comma | Shift + tap: semicolon | Ctrl + shift + tap: <.
-SIMPLE_MORPH(comma_morph, SFT, &kp COMMA, &comma_inner_morph)
-SIMPLE_MORPH(comma_inner_morph, CTL, &kp SEMICOLON, &kp LESS_THAN)
-
-// Tap: dot | Shift + tap: colon | Ctrl + shift + tap: >.
-SIMPLE_MORPH(dot_morph, SFT, &kp DOT, &dot_inner_morph)
-SIMPLE_MORPH(dot_inner_morph, CTL, &kp COLON, &kp GREATER_THAN)
-
-// Tap: qmark | Shift + tap: excl.
-SIMPLE_MORPH(qexcl, SFT, &kp QMARK, &kp EXCL)
-
-// Tap: left/right parenthesis | Shft + tap: less-than/greater-than.
-SIMPLE_MORPH(lpar_lt, SFT, &kp LPAR, &kp LT)
-SIMPLE_MORPH(rpar_gt, SFT, &kp RPAR, &kp GT)
 
 // Tap: space | Shift + tap: dot -> space -> sticky shift | Hold: nav layer.
 ZMK_HOLD_TAP(lt_spc, bindings = <&mo>, <&spc_morph>; flavor = "balanced";
@@ -140,111 +119,160 @@ ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
 
 
 /* Keymap */
-ZMK_CONDITIONAL_LAYER(sys, L_FN L_NUM, L_SYS) // FN + NUM --> SYS.
+ZMK_CONDITIONAL_LAYER(sys, SYM NUM, SYS) // SYM + NUM --> SYS.
+
+/ {
+  behaviors {
+    // Tap: Single quote  ("'")
+    // Shift-tap: Double quote ('"')
+    // Double-tap: Turn on CAPS_WORD
+    // Hold: -
+    // Morph: -
+    sqtcaps: singlequote_or_capsword {
+      compatible = "zmk,behavior-tap-dance";
+      #binding-cells = <0>;
+      tapping-term-ms = <200>;
+      bindings = <&kp SQT>, <&caps_word>;
+    };
+
+    appswtnxt: application_switch_next {
+      compatible = "zmk,behavior-tri-state";
+      #binding-cells = <0>;
+      bindings = <&kt LGUI>, <&kp TAB>, <&kt LGUI>;
+      ignored-key-positions = <LT5 LM5>;
+    };
+
+    winswtnxt: window_switch_next {
+      compatible = "zmk,behavior-tri-state";
+      #binding-cells = <0>;
+      bindings = <&kt LGUI>, <&kp GRAVE>, <&kt LGUI>;
+      ignored-key-positions = <LB5 LM5>;
+    };
+
+    appPwinN: application_switch_previous_window_next {
+      compatible = "zmk,behavior-mod-morph";
+      #binding-cells = <0>;
+      bindings = <&winswtnxt>, <&kp GRAVE>;
+      mods = <(MOD_LGUI|MOD_RGUI)>;
+      keep-mods = <(MOD_LGUI|MOD_RGUI)>;
+    };
+
+    winPglobe: window_previous_globe {
+      compatible = "zmk,behavior-mod-morph";
+      #binding-cells = <0>;
+      bindings = <&kp GLOBE>, <&kp TILDE>;
+      mods = <(MOD_LGUI|MOD_RGUI)>;
+      keep-mods = <(MOD_LGUI|MOD_RGUI)>;
+    };
+  };
+};
 
 / {
 
   keymap {
     compatible = "zmk,keymap";
-
-    MAIN {
-      display-name = "QWERTY";
+    qwerty {
+// -----------------------------------------------------------------------------------------------------------------------------
+// |  ESC     |   Q    |   W    |     E     |     R     |     T     | # |    Y     |    U     |    I    |    O   |   '    |     |
+// |  TAB     | A/LGUI | R/LALT |  S/LCTRL  |  T/LSHFT  |     G     | # |     M     | N/LSHFT  | E/LCTRL | I/LALT | O/LGUI |     |
+// |  LSHIFT  |   Z    | X/RALT |     C     |     D     |     V     | # |     K     |    H     |    ,    | ./RALT |   /    |     |
+//                              |    LCTR   | SPACE/NAV | SYM/ENTER | # | ENTER/SYM | BSPC/NUM |  MOUSE  |
       bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-   &kp ESC    &kp Q      &kp W      &kp E      &kp R      &kp T          &kp Y      &kp U      &kp I      &kp O      &kp P      &kp BSPC
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   &kp TAB    &hml LGUI A &hml LALT S &hml LSHFT D &hml LCTRL F &kp G     &kp H      &hmr LCTRL J &hmr RSHFT K &hmr LALT L &hmr LGUI SQT &kp RET
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   &kp LSHFT  &kp Z      &kp X      &kp C      &kp V      &kp B          &kp N      &kp M      &comma_morph &dot_morph &qexcl    &kp RSHFT
-//╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                    &kp LCTRL  &lt_spc L_NAV 0 &lt L_FN RET   SMART_NUM  MAGIC_SHIFT &mo L_MOU
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-      >;
+    &kp ESC     &kp Q       &kp W           &kp E         &kp R          &kp T                &kp Y          &kp U         &kp I          &kp O         &kp P          &kp BSPC
+    &kp TAB     &mt LGUI A  &mt LALT S      &mt LCTRL D   &mt LSHFT F    &kp G                &kp H          &mt LSHFT J   &mt LCTRL K    &mt LALT L    &mt LGUI SEMI  &kp RET
+    &kp LSHIFT  &kp Z       &kp X           &kp C         &kp V          &kp B                &kp N          &kp M         &kp COMMA       &mt RALT DOT  &kp FSLH       &kp RSHFT
+                                            &kp LCTRL     &lt NAV SPACE  &lt SYM ENTER        &mo NUM        &kp RSHFT     &mo MS
+       >;
     };
 
-    NAV {
-      bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-   ___        &kp LA(F4) ___        &kp LS(LG(TAB)) &kp LG(TAB)  ___     &kp PG_UP  NAV_BSPC   NAV_UP     NAV_DEL    ___        ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        &sk LGUI   &sk LALT   &sk LSHFT  &sk LCTRL  ___            &kp PG_DN  NAV_LEFT   NAV_DOWN   NAV_RIGHT  &kp RET    ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        ___        ___        ___        ___        ___            &kp INS    &kp TAB    ___        ___        ___        ___
-//╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                    ___        ___        ___            ___        ___        CANCEL
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-      >;
-    };
 
-    FUNCTIONS {
-      bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-   ___        &kp F12    &kp F7     &kp F8     &kp F9     ___            ___        ___        &kp C_PREV &kp C_VOL_UP &kp C_NEXT ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        &hml LGUI F11 &hml LALT F4 &hml LSHFT F5 &hml LCTRL F6 ___     ___        ___        DESK_L     VOL_DOWN   DESK_R     ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        &kp F10    &kp F1     &kp F2     &kp F3     ___            ___        ___        ___       DSK_MGR    ___        ___
-//╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                    ___        ___        ___            &kp C_MUTE &kp C_PP   ___
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-      >;
-    };
+    nav {
+// ---------------------------------------------------------------------------------------------
+// |      |     |     |     |     |     | # |     |     |       |         |     |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+//                    |     |     |     | # |     |     |       |
 
-    NUMBERS {
       bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-   ___        ___        &kp N7     &kp N8     &kp N9     ___            ___        &kp LBKT   &kp RBKT   &kp LBRC   &kp RBRC   ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        &hml LGUI N0 &hml LALT N4 &hml LSHFT N5 &hml LCTRL N6 ___       ___        &kp MINUS  &kp EQUAL  &kp PLUS   &kp STAR   ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        ___        &kp N1     &kp N2     &kp N3     ___            ___        &kp UNDER  &kp PIPE   &kp AMPS   &kp HASH   ___
-//╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                    ___        ___        ___            ___        ___        ___
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+                        &trans  &trans  &trans        &trans  &trans  &trans
       >;
-    };
-
-    SYMBOLS {
-      bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-   ___        ___        ___        ___        ___         ___           ___        ___        ___        ___        ___        ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        ___        ___        ___        ___         ___           ___        ___        ___        ___        ___        ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        ___        ___        ___        ___         ___           ___        ___        ___        ___        ___        ___
-//╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                    ___        ___        ___            ___        ___        ___
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-      >;
-    };
-    SYSTEM {
-      bindings = <
-//╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-                          _BT_SEL_KEYS_                   ___            ___        ___        ___        ___        ___        ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        ___        ___        ___        ___        &bootloader    &bootloader ___       ___        ___        ___        ___
-//├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-   ___        ___        ___        ___        ___        &sys_reset     &sys_reset ___        ___        ___        ___        ___
-//╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                    ___        ___        ___            ___        ___        ___
-//                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-      >;
-    };
-
-    MOUSE {
-      bindings = <
-    //╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────┬──────────╮
-       ___        ___        ___        ___        ___        ___            ___        ___        &kp PG_UP  MS_UP     &kp PG_DN   ___
-    //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-       ___        ___        ___        ___        ___        ___            ___        MS_SCRL_L  MS_L       MS_DN     MS_R        MS_SCRL_R
-    //├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┼──────────┤
-       ___        ___        ___        ___        ___        ___            ___        ___        MS_CLKL    MS_CLKM    MS_CLKR     ___
-    //╰──────────┴──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────┴──────────╯
-                                        ___        ___        ___            MS_SCRL_U  MS_SCRL_D  ___
-    //                                 ╰──────────┴──────────┴──────────╯   ╰──────────┴──────────┴──────────╯
-      >;
-    };
   };
+
+    functions {
+// ---------------------------------------------------------------------------------------------
+// |      |     |     |     |     |     | # |     |     |       |         |     |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+//                    |     |     |     | # |     |     |       |
+
+    bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+                    &trans  &trans  &trans        &trans  &trans  &trans
+              >;
+  };
+    numbers {
+// ---------------------------------------------------------------------------------------------
+// |      |     |     |     |     |     | # |     |     |       |         |     |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+//                    |     |     |     | # |     |     |       |
+
+    bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+                    &trans  &trans  &trans        &trans  &trans  &trans
+    >;
+    };
+    symbols {
+// ---------------------------------------------------------------------------------------------
+// |      |     |     |     |     |     | # |     |     |       |         |     |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+//                    |     |     |     | # |     |     |       |
+
+    bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+                    &trans  &trans  &trans        &trans  &trans  &trans
+    >;
 };
 
-/* vim: set ft=c tw=146: */
+  sys {
+            bindings = <
+&trans  &kp F1        &kp F2        &kp F3        &kp F4      &kp F5            &kp F6  &kp F7  &kp F8  &kp F9  &kp F10      &trans
+&trans  &kp F11       &kp F12       &trans        &trans      &studio_unlock    &trans  &trans  &trans  &trans  &trans       &trans
+&trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_CLR  &bt BT_CLR_ALL    &trans  &trans  &trans  &trans  &bootloader  &trans
+                                    &trans        &trans      &trans            &trans  &trans  &trans
+        >;
+  };
+
+    mouse {
+// ---------------------------------------------------------------------------------------------
+// |      |     |     |     |     |     | # |     |     |       |         |     |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+// |      |     |     |     |     |     | # |     |     |       |         |      |     |
+//                    |     |     |     | # |     |     |       |
+
+  bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans        &trans  &trans  &trans    &trans    &trans  &trans
+                  &trans  &trans  &trans        &trans  &trans  &trans
+  >;
+};
+
+  conditional_layers {
+    compatible = "zmk,conditional-layers";
+
+    system {
+        if-layers = <3 4>;
+        then-layer = <5>;
+    };
+};
